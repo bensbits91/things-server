@@ -1,0 +1,26 @@
+{
+  "name": "my-backend-service",
+  "version": "1.0.0",
+  "description": "A backend service using Node.js, Fastify, Mongoose, MongoDB, and Auth0.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node src/index.js",
+    "dev": "NODE_ENV=development nodemon src/index.js"
+  },
+  "dependencies": {
+    "@auth0/auth0-spa-js": "^1.0.0",
+    "@fastify/cors": "^10.0.2",
+    "@fastify/jwt": "^5.0.0",
+    "axios": "^1.7.9",
+    "dotenv": "^10.0.0",
+    "fastify": "^5.2.1",
+    "jwks-rsa": "^3.1.0",
+    "mongoose": "^6.0.0",
+    "pkce-challenge": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
