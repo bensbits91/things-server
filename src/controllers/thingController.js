@@ -8,11 +8,16 @@ class ThingController {
    async createThing(req, reply) {
       console.log('\n\nbb ~ req in thingController:', req, '\n\n');
       try {
+         const { userId, thingId, name, rating, status, review, notes } =
+            req.body;
          const thing = await this.thingService.createThing({
-            userId: req.body.userId,
-            name: req.body.name,
-            type: req.body.type || null,
-            lookupId: req.body.lookupId || null
+            userId: userId,
+            name: name, // user-inputed name
+            detail_id: thingId || null,
+            rating: rating,
+            status: status,
+            review: review || '',
+            notes: notes || ''
          });
 
          reply.code(201).send(thing);
@@ -39,7 +44,8 @@ class ThingController {
       try {
          const { userId } = req.query;
          console.log('bb ~ thingController.js ~ userId:', userId);
-         const things = await this.thingService.getThingsByUser(userId);
+         // todo: do I need an option to get thigs without details?
+         const things = await this.thingService.getThingsByUserWithDetails(userId);
          console.log('bb ~ thingController.js ~ things:', things);
          if (!things) {
             reply.code(404).send({ message: 'Things not found' });

@@ -1,6 +1,7 @@
 const fastify = require('fastify')({ logger: true });
 const mongoose = require('mongoose');
 // const registerUserRoutes = require('./routes/registerUserRoutes');
+const detailRoutes = require('./routes/detailRoutes');
 const thingRoutes = require('./routes/thingRoutes');
 const authMiddleware = require('./utils/authMiddleware');
 const fastifyCors = require('@fastify/cors');
@@ -39,6 +40,7 @@ authMiddleware(fastify);
 
 // Register routes
 fastify.register(thingRoutes);
+fastify.register(detailRoutes);
 // fastify.register(registerUserRoutes); // todo: should we create a user table to store preferences?
 
 // launching server at port : 3000 in local environment
