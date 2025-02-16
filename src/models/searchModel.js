@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const searchCacheSchema = new mongoose.Schema(
+const searchSchema = new mongoose.Schema(
    {
       query: {
          type: String,
@@ -14,6 +14,6 @@ const searchCacheSchema = new mongoose.Schema(
    { timestamps: true }
 );
 
-const SearchCache = mongoose.model('SearchCache', searchCacheSchema);
+const Search = mongoose.model('Search', searchSchema);
 
-module.exports = SearchCache;
+module.exports = Search;

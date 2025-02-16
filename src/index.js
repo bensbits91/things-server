@@ -1,10 +1,7 @@
 const fastify = require('fastify')({ logger: true });
 const mongoose = require('mongoose');
 const cachePlugin = require('./plugins/cachePlugin');
-// const registerUserRoutes = require('./routes/registerUserRoutes');
-const detailRoutes = require('./routes/detailRoutes');
-const thingRoutes = require('./routes/thingRoutes');
-const searchCacheRoutes = require('./routes/searchCacheRoutes');
+const { detailRoutes, thingRoutes, searchRoutes } = require('./routes');
 const authMiddleware = require('./utils/authMiddleware');
 const fastifyCors = require('@fastify/cors');
 
@@ -29,7 +26,6 @@ mongoose
 fastify.register(cachePlugin);
 
 // Register CORS
-//fastify.register(require('@fastify/cors'), {
 fastify.register(fastifyCors, {
    origin: ['http://localhost:3001' /* , 'http://your-other-origin.com' */], // Allow requests from these origins
    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
@@ -46,10 +42,9 @@ authMiddleware(fastify);
 // Register routes
 fastify.register(thingRoutes);
 fastify.register(detailRoutes);
-fastify.register(searchCacheRoutes);
-// fastify.register(registerUserRoutes); // todo: should we create a user table to store preferences?
+fastify.register(searchRoutes);
 
-// launching server at port : 3000 in local environment
+// Launch server at port : 3000 in local environment
 fastify.listen({ port: process.env.PORT || 3000 }, err => {
    if (err) {
       fastify.log.error(err);
