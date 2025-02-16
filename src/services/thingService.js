@@ -13,14 +13,12 @@ class ThingService {
    }
 
    async getThingsByUser(userId) {
-      // todo: is this needed?
-      console.log('\n\nbb ~ thingService.js ~ userId:', userId, '\n\n');
       return Thing.find({ userId: userId });
    }
 
    async getThingsByUserWithDetails(userId) {
       const things = await Thing.aggregate([
-         { $match: { userId: userId } },
+         { $match: { userId } },
          {
             $lookup: {
                from: 'details',
@@ -31,10 +29,6 @@ class ThingService {
          }
       ]);
 
-      console.log(
-         'Aggregated Things with Details:',
-         JSON.stringify(things, null, 2)
-      );
       return things;
    }
 

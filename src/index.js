@@ -1,8 +1,10 @@
 const fastify = require('fastify')({ logger: true });
 const mongoose = require('mongoose');
+const cachePlugin = require('./plugins/cachePlugin');
 // const registerUserRoutes = require('./routes/registerUserRoutes');
 const detailRoutes = require('./routes/detailRoutes');
 const thingRoutes = require('./routes/thingRoutes');
+const searchCacheRoutes = require('./routes/searchCacheRoutes');
 const authMiddleware = require('./utils/authMiddleware');
 const fastifyCors = require('@fastify/cors');
 
@@ -23,10 +25,13 @@ mongoose
    .then(() => console.log('MongoDB connected'))
    .catch(e => console.log('MongoDB could not be connected due to ', e));
 
+// Register the cache plugin
+fastify.register(cachePlugin);
+
 // Register CORS
 //fastify.register(require('@fastify/cors'), {
 fastify.register(fastifyCors, {
-   origin: ['http://localhost:3001'/* , 'http://your-other-origin.com' */], // Allow requests from these origins
+   origin: ['http://localhost:3001' /* , 'http://your-other-origin.com' */], // Allow requests from these origins
    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
    allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
    credentials: true // Allow credentials (cookies, authorization headers, etc.)
@@ -41,6 +46,7 @@ authMiddleware(fastify);
 // Register routes
 fastify.register(thingRoutes);
 fastify.register(detailRoutes);
+fastify.register(searchCacheRoutes);
 // fastify.register(registerUserRoutes); // todo: should we create a user table to store preferences?
 
 // launching server at port : 3000 in local environment
