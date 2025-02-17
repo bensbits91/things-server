@@ -13,8 +13,23 @@ class ThingService {
    }
 
    async getThingsByUser(userId) {
-      console.log('\n\nbb ~ thingService.js ~ userId:', userId, '\n\n');
       return Thing.find({ userId: userId });
+   }
+
+   async getThingsByUserWithDetails(userId) {
+      const things = await Thing.aggregate([
+         { $match: { userId } },
+         {
+            $lookup: {
+               from: 'details',
+               localField: 'detail_id',
+               foreignField: '_id',
+               as: 'details'
+            }
+         }
+      ]);
+
+      return things;
    }
 
    async updateThing(id, updateData) {

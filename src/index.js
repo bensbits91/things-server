@@ -1,7 +1,7 @@
 const fastify = require('fastify')({ logger: true });
 const mongoose = require('mongoose');
-// const registerUserRoutes = require('./routes/registerUserRoutes');
-const thingRoutes = require('./routes/thingRoutes');
+const cachePlugin = require('./plugins/cachePlugin');
+const { detailRoutes, thingRoutes, searchRoutes } = require('./routes');
 const authMiddleware = require('./utils/authMiddleware');
 const fastifyCors = require('@fastify/cors');
 
@@ -22,10 +22,12 @@ mongoose
    .then(() => console.log('MongoDB connected'))
    .catch(e => console.log('MongoDB could not be connected due to ', e));
 
+// Register the cache plugin
+fastify.register(cachePlugin);
+
 // Register CORS
-//fastify.register(require('@fastify/cors'), {
 fastify.register(fastifyCors, {
-   origin: ['http://localhost:3001'/* , 'http://your-other-origin.com' */], // Allow requests from these origins
+   origin: ['http://localhost:3001' /* , 'http://your-other-origin.com' */], // Allow requests from these origins
    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
    allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
    credentials: true // Allow credentials (cookies, authorization headers, etc.)
@@ -39,9 +41,10 @@ authMiddleware(fastify);
 
 // Register routes
 fastify.register(thingRoutes);
-// fastify.register(registerUserRoutes); // todo: should we create a user table to store preferences?
+fastify.register(detailRoutes);
+fastify.register(searchRoutes);
 
-// launching server at port : 3000 in local environment
+// Launch server at port : 3000 in local environment
 fastify.listen({ port: process.env.PORT || 3000 }, err => {
    if (err) {
       fastify.log.error(err);
