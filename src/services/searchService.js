@@ -1,30 +1,26 @@
-const Search = require('../models/searchModel');
+const SearchModel = require('../models/searchModel');
 
 class SearchService {
-   async createSearch(query, results) {
-      const search = new Search({ query, results });
+   async createSearch(query, type, results) {
+      const search = new SearchModel({ query, type, results });
       await search.save();
       return search;
    }
 
-   async getSearch(query) {
-      return Search.findOne({ query });
+   async getSearch(query, type) {
+      return SearchModel.findOne({ query, type });
    }
 
    async getSearchsByUser(userId) {
-      return Search.find({ userId });
+      return SearchModel.find({ userId });
    }
 
-   async updateSearch(query, results) {
-      return Search.findOneAndUpdate(
-         { query },
-         { results },
-         { new: true }
-      );
+   async updateSearch(query, type, results) {
+      return SearchModel.findOneAndUpdate({ query, type }, { results }, { new: true });
    }
 
-   async deleteSearch(query) {
-      return Search.findOneAndDelete({ query });
+   async deleteSearch(query, type) {
+      return SearchModel.findOneAndDelete({ query, type });
    }
 }
 
