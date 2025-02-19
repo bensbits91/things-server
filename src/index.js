@@ -1,9 +1,10 @@
 const fastify = require('fastify')({ logger: true });
 const mongoose = require('mongoose');
-const cachePlugin = require('./plugins/cachePlugin');
-const { detailRoutes, thingRoutes, searchRoutes } = require('./routes');
-const authMiddleware = require('./utils/authMiddleware');
 const fastifyCors = require('@fastify/cors');
+const cachePlugin = require('./plugins/cachePlugin');
+const requestIdMiddleware = require('./plugins/requestIdMiddleware');
+const authMiddleware = require('./utils/authMiddleware');
+const { detailRoutes, thingRoutes, searchRoutes } = require('./routes');
 
 // Load environment variables
 if (process.env.NODE_ENV === 'development') {
@@ -24,6 +25,9 @@ mongoose
 
 // Register the cache plugin
 fastify.register(cachePlugin);
+
+// Register the request ID middleware
+fastify.register(requestIdMiddleware);
 
 // Register CORS
 fastify.register(fastifyCors, {

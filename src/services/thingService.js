@@ -12,13 +12,13 @@ class ThingService {
       return Thing.findById(id);
    }
 
-   async getThingsByUser(userId) {
-      return Thing.find({ userId: userId });
+   async getThingsByUser(userUuid) {
+      return Thing.find({ userUuid: userUuid });
    }
 
-   async getThingsByUserWithDetails(userId) {
+   async getThingsByUserWithDetails(userUuid) {
       const things = await Thing.aggregate([
-         { $match: { userId } },
+         { $match: { userUuid } },
          {
             $lookup: {
                from: 'details',
