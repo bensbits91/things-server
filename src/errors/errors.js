@@ -1,5 +1,3 @@
-// note to self: might want to break these into separate files
-
 class AppError extends Error {
    constructor(statusCode, message, isOperational) {
       super(message);
