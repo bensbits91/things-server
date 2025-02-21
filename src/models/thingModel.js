@@ -23,6 +23,17 @@ const thingSchema = new mongoose.Schema(
    { timestamps: true }
 );
 
+// Define a compound unique index to
+// prevent a user adding the multiple things with the same name and detail_id
+thingSchema.index(
+   {
+      user_uuid: 1,
+      name: 1,
+      detail_id: 1
+   },
+   { unique: true }
+);
+
 const Thing = mongoose.model('Thing', thingSchema);
 
 module.exports = Thing;

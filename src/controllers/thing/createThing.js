@@ -2,7 +2,6 @@ const logger = require('../../utils/logger');
 
 module.exports = async function createThing(req, reply) {
    try {
-      // const { detailId, name, rating, status, review, notes } = req.body;
       const {
          userUuid,
          body: { detail_id, name, rating, status, review, notes },
@@ -29,10 +28,24 @@ module.exports = async function createThing(req, reply) {
 
       reply.header('X-Request-ID', req.id).code(201).send(thingResponse);
    } catch (error) {
-      logger.error('thingController.js ~ Error in createThing:', {
-         requestId: req.id,
-         error: error.message || error
-      });
-      reply.header('X-Request-ID', req.id).code(500).send({ message: error.message });
+      if (error.code === 11000) {
+         // MongoDB duplicate key error code
+         logger.error('thingController.js ~ Duplicate key error in createThing:', {
+            requestId: req.id,
+            error: error.message || error
+         });
+         reply
+            .header('X-Request-ID', req.id)
+            .code(409)
+            .send({
+               message: 'Duplicate entry for user_uuid, name, and detail_id combination'
+            });
+      } else {
+         logger.error('thingController.js ~ Error in createThing:', {
+            requestId: req.id,
+            error: error.message || error
+         });
+         reply.header('X-Request-ID', req.id).code(500).send({ message: error.message });
+      }
    }
 };
