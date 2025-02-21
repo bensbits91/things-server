@@ -1,11 +1,21 @@
 const Thing = require('../models/thingModel');
+const { DuplicateKeyError } = require('../errors/errors');
 
 class ThingService {
    async createThing(thingData) {
-      console.log('\n\nbb ~ thingData:', thingData, '\n\n');
-      const thing = new Thing(thingData);
-      await thing.save();
-      return thing;
+      try {
+         console.log('\n\nbb ~ thingData:', thingData, '\n\n');
+         const thing = new Thing(thingData);
+         await thing.save();
+         return thing;
+      } catch (error) {
+         if (error.code === 11000) {
+            throw new DuplicateKeyError(
+               'Duplicate entry for user_uuid, name, and detail_id combination'
+            );
+         }
+         throw error;
+      }
    }
 
    async getThing(id) {

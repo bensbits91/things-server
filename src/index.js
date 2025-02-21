@@ -5,6 +5,7 @@ const cachePlugin = require('./plugins/cachePlugin');
 const requestIdMiddleware = require('./plugins/requestIdMiddleware');
 const authMiddleware = require('./utils/authMiddleware');
 const { detailRoutes, thingRoutes, searchRoutes } = require('./routes');
+const errorHandler = require('./utils/errorHandler');
 
 // Load environment variables
 if (process.env.NODE_ENV === 'development') {
@@ -23,6 +24,9 @@ mongoose
    .connect(connectionString, {})
    .then(() => console.log('MongoDB connected'))
    .catch(e => console.log('MongoDB could not be connected due to ', e));
+
+// Register the error handler
+fastify.setErrorHandler(errorHandler);
 
 // Register the cache plugin
 fastify.register(cachePlugin);
