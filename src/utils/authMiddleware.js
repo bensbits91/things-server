@@ -17,7 +17,15 @@ const authMiddleware = fastify => {
    }
 
    async function addUserUuidToRequest(request) {
+      console.log(
+         '\n\n\nbb ~ authMiddleware.js ~ request.headers:',
+         request.headers,
+         '\n\n\n'
+      );
       const authHeader = request.headers.authorization || '';
+      if (!authHeader) {
+         throw new Error('No authorization header found');
+      }
       const rawToken = authHeader.replace(/^Bearer\s+/, '');
       const headerB64 = rawToken.split('.')[1]; // the second part of the token is the payload
       const payload = Buffer.from(headerB64, 'base64').toString('utf8');

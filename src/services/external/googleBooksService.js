@@ -5,10 +5,7 @@ const { normalizeGoogleBooksData } = require('../../utils/normalizationUtils');
 class GoogleBooksService {
    async search({ query }) {
       const safeSearchTerm = makeSafeQueryString(query);
-      console.log('bb ~ googleBooksService.js ~ safeSearchTerm:', safeSearchTerm);
-
       const url = `${process.env.GOOGLE_BOOKS_BASE_URL}?q=${safeSearchTerm}&key=${process.env.GOOGLE_BOOKS_API_KEY}`;
-      console.log('bb ~ googleBooksService.js ~ url:', url);
       const options = {
          method: 'GET',
          headers: {

@@ -2,7 +2,6 @@ const Detail = require('../models/detailModel');
 
 class DetailService {
    async createDetail(detailData) {
-      console.log('\n\nbb ~ detailData:', detailData, '\n\n');
       const detail = new Detail(detailData);
       await detail.save();
       return detail;
@@ -12,10 +11,9 @@ class DetailService {
       return Detail.findById(id);
    }
 
-   // async getDetailsByUser(userId) {
-   //    console.log('\n\nbb ~ detailService.js ~ userId:', userId, '\n\n');
-   //    return Detail.find({ userId: userId });
-   // }
+   async getDetailByExternalId(externalId) {
+      return Detail.findOne({ external_id: externalId });
+   }
 
    async updateDetail(id, updateData) {
       return Detail.findByIdAndUpdate(id, updateData, { new: true });

@@ -18,6 +18,7 @@ mongoose.set('strictQuery', true); // todo: what does this do? Should it be fals
 
 // Connect to MongoDB Atlas
 const connectionString = `mongodb+srv://${DB_USER}:${DB_PW}@${DB_DOMAIN}.orplk.mongodb.net/?retryWrites=true&w=majority&appName=${DB_PROJECT}`;
+console.log('bb ~ index.js ~ connectionString:', connectionString);
 mongoose
    .connect(connectionString, {})
    .then(() => console.log('MongoDB connected'))

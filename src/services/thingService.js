@@ -13,12 +13,13 @@ class ThingService {
    }
 
    async getThingsByUser(userUuid) {
-      return Thing.find({ userUuid: userUuid });
+      console.log('\n\n\nbb ~ thingService.js ~ userUuid:', userUuid, '\n\n\n');
+      return Thing.find({ user_uuid: userUuid });
    }
 
    async getThingsByUserWithDetails(userUuid) {
       const things = await Thing.aggregate([
-         { $match: { userUuid } },
+         { $match: { user_uuid: userUuid } },
          {
             $lookup: {
                from: 'details',

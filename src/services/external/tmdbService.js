@@ -6,15 +6,9 @@ const { normalizeTmdbData } = require('../../utils/normalizationUtils');
 
 class TmdbService {
    async search({ query, type = 'multi' }) {
-      console.log('bb ~ tmdbService.js ~ { query, type }:', {
-         query,
-         type
-      });
       const safeType = makeSafeQueryString(type); // todo: do we need to make this safe? It's a string we control. Remove if not needed or problematic.
       const safeSearchTerm = makeSafeQueryString(query);
-
       const url = `${process.env.TMDB_BASE_URL}/search/${safeType}?query=${safeSearchTerm}&include_adult=false&language=en-US&page=1`;
-      console.log('bb ~ tmdbService.js ~ url:', url);
       const options = {
          method: 'GET',
          headers: {

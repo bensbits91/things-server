@@ -8,7 +8,7 @@ module.exports = async function getSearch(req, reply) {
          query: { query, types }
       } = req;
 
-      const normalizedTypes = ['tvshow', 'book', 'movie', 'videogame'];
+      const normalizedTypes = ['TV Show', 'Book', 'Movie', 'Video Game'];
 
       const results = [];
 

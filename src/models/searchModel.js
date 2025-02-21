@@ -10,8 +10,8 @@ const searchSchema = new mongoose.Schema(
          type: String,
          required: true
       },
-      results: {
-         type: Array,
+      results: { // storing search results normalized
+         type: Array, // todo: Should we have chlid schema? Should it be the detail schema?
          required: true
       }
    },

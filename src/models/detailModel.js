@@ -15,13 +15,28 @@ const detailSchema = new mongoose.Schema(
       description: {
          type: String
       },
-      mainImageUrl: {
+      main_image_url: {
          type: String
       },
-      externalId: {
+      country: {
          type: String
       },
-      externalData: {
+      date: {
+         type: String // todo: store as a date type?
+      },
+      language: {
+         type: String
+      },
+      genres: {
+         type: [String]
+      },
+      people: {
+         type: [String]
+      },
+      external_id: {
+         type: String
+      },
+      external_data: {
          type: mongoose.Schema.Types.Mixed
       }
    },

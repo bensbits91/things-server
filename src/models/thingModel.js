@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const thingSchema = new mongoose.Schema(
    {
-      userUuid: {
+      user_uuid: {
          type: String,
          required: true
       },
@@ -18,7 +18,7 @@ const thingSchema = new mongoose.Schema(
       status: { type: Number, enum: [-1, 0, 1], default: 0 }, // Numeric status for sorting
       review: { type: String, maxlength: 1000 },
       notes: { type: String, maxlength: 1000 },
-      isSoftDeleted: { type: Boolean, default: false }
+      is_soft_deleted: { type: Boolean, default: false }
    },
    { timestamps: true }
 );
