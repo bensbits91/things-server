@@ -1,4 +1,5 @@
 const Detail = require('../models/detailModel');
+const { DuplicateKeyError, NotFoundError, ValidationError } = require('../errors/errors');
 
 class DetailService {
    async createDetail(detailData) {
@@ -10,6 +11,13 @@ class DetailService {
          await detail.save();
          return detail;
       } catch (error) {
+         if (error.code === 11000) {
+            console.error('\n\n\n\nDuplicate entry for type, name, and external_id combination');
+            console.info('bb ~ detailService.js ~ detailData:', detailData, '\n\n\n\n');
+            throw new DuplicateKeyError(
+               'Duplicate entry for type, name, and external_id combination'
+            );
+         }
          throw error;
       }
    }

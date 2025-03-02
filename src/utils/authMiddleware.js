@@ -17,11 +17,6 @@ const authMiddleware = fastify => {
    }
 
    async function addUserUuidToRequest(request) {
-      console.log(
-         '\n\n\nbb ~ authMiddleware.js ~ request.headers:',
-         request.headers,
-         '\n\n\n'
-      );
       const authHeader = request.headers.authorization || '';
       if (!authHeader) {
          throw new Error('No authorization header found');
@@ -68,9 +63,12 @@ const authMiddleware = fastify => {
          await addUserUuidToRequest(request);
          await request.jwtVerify();
          console.log('JWT verified successfully');
-      } catch (err) {
-         console.log('Error in authMiddleware:', err);
-         reply.send(err);
+      } catch (error) {
+         console.log('Error in authMiddleware:', error);
+         if (error === 'UnauthorizedError: Authorization token expired') {
+            reply.code(401).send({ error });
+         }
+         reply.send(error);
       }
    });
 };

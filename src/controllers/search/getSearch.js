@@ -15,19 +15,23 @@ module.exports = async function getSearch(req, reply) {
    for (const type of normalizedTypes) {
       const cacheKey = `search:${query}:${type}`;
       let typeResults = await cache.get(cacheKey);
-      logger.info('Results FROM CACHE', {
-         requestId: id,
-         type,
-         count: typeResults?.results?.length || typeResults?.length || 0
-      });
-
-      if (!typeResults) {
-         typeResults = await this.searchService.getSearch(query, type);
-         logger.info('Results FROM DB', {
+      if (typeResults?.results?.length || typeResults?.length) {
+         logger.info('Results FROM CACHE', {
             requestId: id,
             type,
             count: typeResults?.results?.length || typeResults?.length || 0
          });
+      }
+
+      if (!typeResults) {
+         typeResults = await this.searchService.getSearch(query, type);
+         if (typeResults?.results?.length || typeResults?.length) {
+            logger.info('Results FROM DB', {
+               requestId: id,
+               type,
+               count: typeResults?.results?.length || typeResults?.length || 0
+            });
+         }
          if (typeResults) {
             await cache.set(cacheKey, typeResults);
          } else {

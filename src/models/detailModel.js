@@ -34,7 +34,8 @@ const detailSchema = new mongoose.Schema(
          type: [String]
       },
       external_id: {
-         type: String
+         type: String,
+         required: true
       },
       external_data: {
          type: mongoose.Schema.Types.Mixed
@@ -43,6 +44,27 @@ const detailSchema = new mongoose.Schema(
    { timestamps: true }
 );
 
+// Define a compound unique index to
+// prevent a adding multiple details
+// with the same extneral_id, name and type
+detailSchema.index(
+   {
+      name: 1,
+      type: 1,
+      external_id: 1
+   },
+   { unique: true }
+);
+
 const Detail = mongoose.model('Detail', detailSchema);
+
+// Ensure indexes are created
+// Detail.on('index', error => {
+//    if (error) {
+//       console.error('Index creation failed:', error);
+//    } else {
+//       console.log('Indexes created successfully');
+//    }
+// });
 
 module.exports = Detail;

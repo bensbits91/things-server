@@ -1,5 +1,9 @@
-const User = require('./userModel');
+const Thing = require('./thingModel');
+const Detail = require('./detailModel');
+const Search = require('./searchModel');
 
 module.exports = {
-   User
+   Thing,
+   Detail,
+   Search
 };
