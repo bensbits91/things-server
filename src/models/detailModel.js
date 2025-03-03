@@ -15,19 +15,56 @@ const detailSchema = new mongoose.Schema(
       description: {
          type: String
       },
-      mainImageUrl: {
+      main_image_url: {
          type: String
       },
-      externalId: {
+      country: {
          type: String
       },
-      externalData: {
+      date: {
+         type: String // todo: store as a date type?
+      },
+      language: {
+         type: String
+      },
+      genres: {
+         type: [String]
+      },
+      people: {
+         type: [String]
+      },
+      external_id: {
+         type: String,
+         required: true
+      },
+      external_data: {
          type: mongoose.Schema.Types.Mixed
       }
    },
    { timestamps: true }
 );
 
+// Define a compound unique index to
+// prevent a adding multiple details
+// with the same extneral_id, name and type
+detailSchema.index(
+   {
+      name: 1,
+      type: 1,
+      external_id: 1
+   },
+   { unique: true }
+);
+
 const Detail = mongoose.model('Detail', detailSchema);
+
+// Ensure indexes are created
+// Detail.on('index', error => {
+//    if (error) {
+//       console.error('Index creation failed:', error);
+//    } else {
+//       console.log('Indexes created successfully');
+//    }
+// });
 
 module.exports = Detail;

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const thingSchema = new mongoose.Schema(
    {
-      userUuid: {
+      user_uuid: {
          type: String,
          required: true
       },
@@ -15,12 +15,24 @@ const thingSchema = new mongoose.Schema(
          ref: 'details'
       },
       rating: { type: Number, min: 0, max: 10, default: 0 },
-      status: { type: Number, enum: [-1, 0, 1], default: 0 }, // Numeric status for sorting
+      status: { type: Number, enum: [0, 1, 2, 3, 4, 5, 6, 86], default: 0 }, // Numeric status for sorting
       review: { type: String, maxlength: 1000 },
       notes: { type: String, maxlength: 1000 },
-      isSoftDeleted: { type: Boolean, default: false }
+      is_soft_deleted: { type: Boolean, default: false }
    },
    { timestamps: true }
+);
+
+// Define a compound unique index to
+// prevent a adding multiple things
+// with the same user_uuid, name and detail_id
+thingSchema.index(
+   {
+      user_uuid: 1,
+      name: 1,
+      detail_id: 1
+   },
+   { unique: true }
 );
 
 const Thing = mongoose.model('Thing', thingSchema);

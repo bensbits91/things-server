@@ -4,12 +4,12 @@ module.exports = async function updateThing(req, reply) {
    try {
       const {
          server: { cache },
-         params: { id },
+         params: { _id },
          body
       } = req;
-      const thing = await this.thingService.updateThing(id, body);
+      const thing = await this.thingService.updateThing(_id, body);
       if (!thing) {
-         await cache.del(`thing:${id}`);
+         await cache.del(`thing:${_id}`);
          logger.error('thingController.js ~ Thing not found for updating:', {
             requestId: req.id
          });
@@ -18,7 +18,7 @@ module.exports = async function updateThing(req, reply) {
             .code(404)
             .send({ message: 'Thing not found' });
       } else {
-         await cache.set(`thing:${id}`, thing);
+         await cache.set(`thing:${_id}`, thing);
          reply.header('X-Request-ID', req.id).code(200).send(thing);
       }
    } catch (error) {

@@ -15,6 +15,14 @@ class InMemoryCache extends CacheInterface {
    async set(key, value) {
       this.cache.set(key, value);
    }
+
+   async del(key) {
+      this.cache.delete(key);
+   }
+
+   async flush() {
+      this.cache.clear();
+   }
 }
 
 module.exports = InMemoryCache;

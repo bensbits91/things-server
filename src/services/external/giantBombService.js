@@ -5,10 +5,7 @@ const { normalizeGiantBombData } = require('../../utils/normalizationUtils');
 class GiantBombService {
    async search({ query }) {
       const safeSearchTerm = makeSafeQueryString(query);
-      console.log('bb ~ giantBombService.js ~ safeSearchTerm:', safeSearchTerm);
-
       const url = `${process.env.GIANTBOMB_BASE_URL}/search?query=${safeSearchTerm}&api_key=${process.env.GIANTBOMB_API_KEY}&format=json`;
-      console.log('bb ~ giantBombService.js ~ url:', url);
       const options = {
          method: 'GET',
          headers: {

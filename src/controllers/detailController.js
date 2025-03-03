@@ -6,80 +6,30 @@ class DetailController {
    }
 
    async createDetail(req, reply) {
-      console.log('\n\nbb ~ req in detailController:', req, '\n\n');
-      try {
-         const detail = await this.detailService.createDetail({
-            name: req.body.name,
-            type: req.body.type,
-            description: req.body.description || '',
-            mainImageUrl: req.body.mainImageUrl || '',
-            externalId: req.body.externalId,
-            externalData: req.body.externalData,
-         });
-
-         reply.code(201).send(detail);
-      } catch (error) {
-         console.log('\n\nbb ~ error in detailController:', error, '\n\n');
-         reply.code(500).send({ message: error.message });
-      }
+      const { detail } = req.body;
+      const detailResponse = await this.detailService.createDetail(detail);
+      reply.code(201).send(detailResponse);
    }
 
    async getDetail(req, reply) {
-      try {
-         const detail = await this.detailService.getDetail(req.params.id);
-         if (!detail) {
-            reply.code(404).send({ message: 'Detail not found' });
-         } else {
-            reply.code(200).send(detail);
-         }
-      } catch (error) {
-         reply.code(500).send({ message: error.message });
-      }
+      const detail = await this.detailService.getDetail(req.params.id);
+      reply.code(200).send(detail);
    }
 
-   // async getDetailsByUser(req, reply) {
-   //    try {
-   //       const { userId } = req.query;
-   //       console.log('bb ~ detailController.js ~ userId:', userId);
-   //       const details = await this.detailService.getDetailsByUser(userId);
-   //       console.log('bb ~ detailController.js ~ details:', details);
-   //       if (!details) {
-   //          reply.code(404).send({ message: 'Details not found' });
-   //       } else {
-   //          reply.code(200).send(details);
-   //       }
-   //    } catch (error) {
-   //       reply.code(500).send({ message: error.message });
-   //    }
-   // }
+   async getDetailByExternalId(req, reply) {
+      const { externalId } = req.params;
+      const detail = await this.detailService.getDetailByExternalId(externalId);
+      return reply.code(200).send(detail);
+   }
 
    async updateDetail(req, reply) {
-      try {
-         const detail = await this.detailService.updateDetail(
-            req.params.id,
-            req.body
-         );
-         if (!detail) {
-            reply.code(404).send({ message: 'Detail not found' });
-         } else {
-            reply.code(200).send(detail);
-         }
-      } catch (error) {
-         reply.code(500).send({ message: error.message });
-      }
+      const detail = await this.detailService.updateDetail(req.params.id, req.body);
+      reply.code(200).send(detail);
    }
 
    async deleteDetail(req, reply) {
-      try {
-         const detail = await this.detailService.deleteDetail(req.params.id);
-         if (!detail) {
-            reply.code(404).send({ message: 'Detail not found' });
-         } else {
-            reply.code(204).send();
-         }
-      } catch (error) {
-         reply.code(500).send({ message: error.message });
-      }
+      const detail = await this.detailService.deleteDetail(req.params.id);
+      reply.code(204).send();
    }
 }
 

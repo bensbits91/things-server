@@ -1,25 +1,21 @@
-const logger = require('../../utils/logger');
-
 module.exports = async function createThing(req, reply) {
-   try {
-      const { detailId, name, rating, status, review, notes } = req.body;
-      const { userUuid } = req.user;
-      const thing = await this.thingService.createThing({
-         userUuid: userUuid,
-         name: name, // user-inputed name
-         detail_id: detailId || null,
-         rating: rating,
-         status: status,
-         review: review || '',
-         notes: notes || ''
-      });
+   const {
+      userUuid,
+      body: { detail_id, name, rating, status, review, notes },
+      server: { cache }
+   } = req;
+   const thingData = {
+      user_uuid: userUuid,
+      name: name, // user-inputed name
+      detail_id: detail_id || null,
+      rating: rating || 0,
+      status: status || 0,
+      review: review || '',
+      notes: notes || ''
+   };
+   const thingResponse = await this.thingService.createThing(thingData);
+   const cacheKey = `thingsByUser:${userUuid}`;
+   await cache.del(cacheKey);
 
-      reply.header('X-Request-ID', req.id).code(201).send(thing);
-   } catch (error) {
-      logger.error('thingController.js ~ Error in createThing:', {
-         requestId: req.id,
-         error: error.message || error
-      });
-      reply.header('X-Request-ID', req.id).code(500).send({ message: error.message });
-   }
+   reply.header('X-Request-ID', req.id).code(201).send(thingResponse);
 };
