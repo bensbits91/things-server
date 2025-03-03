@@ -110,12 +110,12 @@ class ThingService {
       }
    }
 
-   async updateThing(_id, updateData) {
-      if (!_id || !updateData) {
+   async updateThing(id, updateData) {
+      if (!id || !updateData) {
          throw new ValidationError('Missing required parameters');
       }
       try {
-         return Thing.findByIdAndUpdate(_id, updateData, { new: true });
+         return Thing.findByIdAndUpdate(id, updateData, { new: true });
       } catch {
          if (error.code === 404) {
             throw new NotFoundError('Thing not found');
