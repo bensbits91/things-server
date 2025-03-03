@@ -4,7 +4,8 @@ const fastifyCors = require('@fastify/cors');
 const cachePlugin = require('./plugins/cachePlugin');
 const requestIdMiddleware = require('./plugins/requestIdMiddleware');
 const authMiddleware = require('./utils/authMiddleware');
-const { detailRoutes, thingRoutes, searchRoutes } = require('./routes');
+const { detailRoutes, thingRoutes, searchRoutes, statusRoutes } = require('./routes');
+const { loadStatuses } = require('./services/statusService');
 const errorHandler = require('./utils/errorHandler');
 
 // Load environment variables
@@ -41,16 +42,17 @@ fastify.register(fastifyCors, {
    credentials: true // Allow credentials (cookies, authorization headers, etc.)
 });
 
-// Register models
-require('./models');
+require('./models'); // Register models
 
-// Register JWT middleware
-authMiddleware(fastify);
+loadStatuses(); // Load status map when the server starts
+
+authMiddleware(fastify); // Register JWT middleware
 
 // Register routes
 fastify.register(thingRoutes);
 fastify.register(detailRoutes);
 fastify.register(searchRoutes);
+fastify.register(statusRoutes);
 
 // Launch server at port : 3000 in local environment
 fastify.listen({ port: process.env.PORT || 3000 }, err => {

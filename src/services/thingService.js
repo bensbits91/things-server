@@ -1,5 +1,6 @@
 const Thing = require('../models/thingModel');
 const { DuplicateKeyError, NotFoundError, ValidationError } = require('../errors/errors');
+const StatusService = require('./statusService');
 
 class ThingService {
    async createThing(thingData) {
@@ -56,32 +57,7 @@ class ThingService {
          throw new ValidationError('userUuid is required');
       }
       try {
-         const statusMap = {
-            Book: {
-               '-1': 'Dropped',
-               0: 'Not read',
-               1: 'Reading',
-               2: 'Read'
-            },
-            Movie: {
-               '-1': 'Dropped',
-               0: 'Not watched',
-               1: 'Watching',
-               2: 'Watched'
-            },
-            'TV Show': {
-               '-1': 'Dropped',
-               0: 'Not watched',
-               1: 'Watching',
-               2: 'Watched'
-            },
-            'Video Game': {
-               '-1': 'Dropped',
-               0: 'Not played',
-               1: 'Playing',
-               2: 'Played'
-            }
-         };
+         const statusMap = StatusService.getStatusMap();
          const mapStatusToText = (status, type) => statusMap[type][status];
 
          const things = await Thing.aggregate([
@@ -120,7 +96,7 @@ class ThingService {
                   thing.language = language;
                   thing.main_image_url = main_image_url;
                   thing.people = people;
-                  thing.statusText = mapStatusToText(thing.status, type);
+                  thing.statusText = mapStatusToText(thing.status, type); // note to self: server-side mapping could get costly if we have a lot of users
                }
                return thing;
             });
