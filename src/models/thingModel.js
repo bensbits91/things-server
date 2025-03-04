@@ -17,6 +17,12 @@ const thingSchema = new mongoose.Schema(
       rating: { type: Number, min: 0, max: 10, default: 0 },
       status: { type: Number, enum: [0, 1, 2, 3, 4, 5, 6, 86], default: 0 }, // Numeric status for sorting
       times: { type: Number, default: 0 },
+      tags: [
+         {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'tags'
+         }
+      ],
       review: { type: String, maxlength: 1000 },
       notes: { type: String, maxlength: 1000 },
       is_soft_deleted: { type: Boolean, default: false }
@@ -24,13 +30,9 @@ const thingSchema = new mongoose.Schema(
    { timestamps: true }
 );
 
-// Define a compound unique index to
-// prevent a adding multiple things
-// with the same user_uuid, name and detail_id
 thingSchema.index(
    {
       user_uuid: 1,
-      name: 1,
       detail_id: 1
    },
    { unique: true }
